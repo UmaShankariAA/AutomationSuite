@@ -1,0 +1,19 @@
+package com.test.qa.configurations;
+
+import java.util.Properties;
+import com.test.qa.utilities.PropertiesFileReader;
+
+public interface Configuration {
+
+	public static final String PROJECT_DIR = System.getProperty("user.dir");
+	public static final Properties config = PropertiesFileReader.read(PROJECT_DIR + "/config.properties");
+	
+	public static final String BASE_URL = config.getProperty("baseUrl");
+	public static final String BROWSER_NAME = config.getProperty("browser");
+	public static final String PLATFORM_NAME = config.getProperty("platformName");
+	
+	public static final String MAIN_RESOURCE_PATH = PROJECT_DIR + "/src/main/resources/";
+	public static final String TEST_RESOURCE_PATH = PROJECT_DIR + "/src/test/resources/";
+	
+	public static final String REPORT_PATH = config.getProperty("reportPath");
+}
