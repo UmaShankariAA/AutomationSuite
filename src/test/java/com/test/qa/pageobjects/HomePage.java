@@ -4,7 +4,6 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.WebDriver;
 import com.aventstack.extentreports.Status;
 import com.test.qa.reportmanager.Report;
-import com.test.qa.utilities.GeneralElementHandlers;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.testng.Assert;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -37,10 +36,7 @@ public class HomePage {
 	public HomePage(WebDriver driver) {
 		this.driver = driver;
 	}
-	GeneralElementHandlers obj=new GeneralElementHandlers();
-
-
-
+	
 	/**
 	 * Login with valid credentials
 	 * 
