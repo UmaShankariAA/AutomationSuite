@@ -21,6 +21,7 @@ public class ShippingPage {
 	public ShippingPage(WebDriver driver) {
 		this.driver = driver;
 	}
+
 	public By locationBox = By.xpath("//input[@aria-controls='listbox--1']");
 	public By locationSuggestion = By.xpath("//ul[@id='listbox--1']/li[1]");
 	public By confirmLocation = By.xpath("(//span[contains(text(), 'Confirm location')])/parent::button");
@@ -34,6 +35,11 @@ public class ShippingPage {
 	public By confirmShippingAddress = By.xpath("//span[contains(text(), 'Confirm shipping address')]");
 	public By editLocation=By.xpath("//*[@id='location']/..//following-sibling::div[1]");
 	public By addNewAddress=By.xpath("//span[contains(text(), 'Add new address')]//parent::button");
+	public By mapMapUI=By.xpath("(//*[@class='gm-style-mtc'])[1]");
+	public By mapSatelliteUI=By.xpath("((//*[@class='gm-style-mtc'])[2]");
+	String checkBoxXPath="//li[@role='menuitemcheckbox' and @title='Show imagery with street names']";
+	String mapContainerXPath = "//div[@class='gm-style']";
+
 	/**
 	 * Login with valid credentials
 	 * 
@@ -52,6 +58,8 @@ public class ShippingPage {
 		driver.findElement(editLocation).click();
 		wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(addNewAddress)));
 		checkAddNewAddress();
+//		driver.findElement(mapSatelliteUI).click();
+//		validateCheckBoxBehavior(checkBoxXPath,mapContainerXPath);
 		driver.findElement(locationBox).clear();
 		driver.findElement(locationBox).sendKeys("Hawally,Kuwait");
 		Thread.sleep(100);
@@ -94,7 +102,7 @@ public class ShippingPage {
 	public void checkAddNewAddress() throws Exception {
 		try {
 
-			// If OOS found, click decrease qty
+
 			if (driver.findElement(addNewAddress).isDisplayed()) {
 				driver.findElement(addNewAddress).click();
 				System.out.println("addNewAddress found");
@@ -106,4 +114,36 @@ public class ShippingPage {
 		}
 	}
 
+	// Method to handle checkbox click and validation of label appearance
+	public void validateCheckBoxBehavior(String checkBoxXPath, String mapContainerXPath) {
+		// Locate the checkbox element
+		WebElement checkBox = driver.findElement(By.xpath(checkBoxXPath));
+
+		// Locate the map container (or label) that changes visibility
+		WebElement mapContainer = driver.findElement(By.xpath(mapContainerXPath));
+
+		// Click the checkbox to select it
+		checkBox.click();
+
+		// Wait and validate if the CSS visibility or display has changed
+		validateVisibility(mapContainer, "after checking");
+
+		// Click the checkbox again to unselect it
+		checkBox.click();
+
+		// Validate the CSS visibility or display change after unchecking
+		validateVisibility(mapContainer, "after unchecking");
+	}
+
+	// Method to check visibility or display properties
+	private void validateVisibility(WebElement element, String action) {
+		String visibility = element.getCssValue("visibility");
+		String display = element.getCssValue("display");
+
+		if (visibility.equals("visible") && !display.equals("none")) {
+			System.out.println("Map label appears " + action + " the checkbox.");
+		} else {
+			System.out.println("Map label disappears " + action + " the checkbox.");
+		}
+	}
 }

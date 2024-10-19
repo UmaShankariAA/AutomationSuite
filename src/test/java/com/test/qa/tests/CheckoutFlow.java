@@ -51,7 +51,6 @@ public class CheckoutFlow extends BaseTest {
 			objCart.emptyCart();
 			Map<String, String> productDetails = new HashMap<>();
 			productDetails=obj.searchProduct(search);
-			Assert.assertEquals(obj.getPageCurrentUrl(), "https://www.xcite.com/search?q=iPhone");
 			Report.log(Status.PASS, "Search is successful");
 			Report.log(Status.PASS, "Product details are"+productDetails);
 			Thread.sleep(1000);

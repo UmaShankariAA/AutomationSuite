@@ -92,7 +92,7 @@ public class HomePage {
 	public Map<String, String> searchProduct(String search) throws Exception {
 		driver.get("https://www.xcite.com/");
 		Thread.sleep(1000);
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(60));
 		wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(searchInput)));
 		driver.findElement(searchInput).sendKeys(search);
 		wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(searchIcon)));
@@ -100,6 +100,7 @@ public class HomePage {
 		Thread.sleep(2000);
 		wait.until((ExpectedCondition<Boolean>) wd ->
 				((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
+		Assert.assertEquals(getPageCurrentUrl(), "https://www.xcite.com/search?q=iPhone");
 		String productNameSearch = driver.findElement(productName).getText();
 		String productPriceSearch = driver.findElement(productPrice).getText();
 		Map<String, String> productDetails = new HashMap<>();

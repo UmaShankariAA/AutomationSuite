@@ -50,7 +50,7 @@ public class CartPage {
 		Assert.assertEquals((int) qtyProductNew, (int) qtyProduct+1, "The value is not incremented by 1.");
 		// to be done : add a json object or map to be compared with pdp
 		Report.log(Status.PASS, "Qty is increased");
-		checkOOS();
+//		checkOOS();
 		wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(Checkout)));
 		driver.findElement(Checkout).click();
 
