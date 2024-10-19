@@ -1,5 +1,14 @@
 pipeline {
     agent any
+
+    tools {
+        maven 'mvn'  // Use the name you gave Maven in the Jenkins tool configuration
+    }
+    
+    environment {
+        GIT_SSH_COMMAND = 'ssh -o StrictHostKeyChecking=no' // Skip host key checking
+    }
+    
     stages {
 	stage('Checkout') {
             steps {
