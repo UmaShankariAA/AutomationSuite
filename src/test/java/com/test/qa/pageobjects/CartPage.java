@@ -16,7 +16,10 @@ public class CartPage {
 	WebDriver driver;
 	public By increaseQtyBtn = By.xpath("//button[@aria-label='increase quantity']");
 	public By qtyText = By.xpath("//*[@aria-label='decrease quantity']//following-sibling::span");
-	public By Checkout = By.xpath("//span[contains(text(), 'Checkout')]");
+//	public By Checkout = By.xpath("//span[contains(text(), 'Checkout')]//parent::button");
+    public By Checkout = By.xpath("(//*[@class='button primaryOnLight '])");
+	public By OOS = By.xpath("//span[contains(text(), 'item(s) is insufficient in stock')]");
+	public By decreaseQtyBtn = By.xpath("//button[@aria-label='decrease quantity']");
 
 	public CartPage(WebDriver driver) {
 		this.driver = driver;
@@ -41,11 +44,25 @@ public class CartPage {
 		Assert.assertEquals((int) qtyProductNew, (int) qtyProduct+1, "The value is not incremented by 1.");
 		// to be done : add a json object or map to be compared with pdp
 		Report.log(Status.PASS, "Qty is increased");
+		checkOOS();
+		wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(Checkout)));
 		driver.findElement(Checkout).click();
 
 	}
+	public void checkOOS() throws Exception {
+		try {
 
+			// If OOS found, click decrease qty
+			if (driver.findElement(OOS).isDisplayed()) {
+				driver.findElement(decreaseQtyBtn).click();
+				System.out.println("OOS element found, so decreasing the item qunatity to proceed");
+			}
 
+		} catch (NoSuchElementException e) {
+			// First element is not present, do nothing or log a message
+			System.out.println("OOS element not found, so qunatity remains increased .");
+		}
+	}
 	public void emptyCart() throws Exception {
 
 		// Find all elements matching the given XPath

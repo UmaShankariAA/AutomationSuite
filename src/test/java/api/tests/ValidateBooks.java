@@ -71,7 +71,9 @@ public class ValidateBooks {
         modifiedJson.put("userId", userId);
         // Step 5: Add the "collectionOfIsbns" key and assign the books array to it
         modifiedJson.put("collectionOfIsbns", booksArray);
-        Report.log(Status.PASS, "Json output is modified as per the add books reuest body requirement  ");
+        Report.log(Status.PASS, "Json output from the get all books APIs: "+jsonString);
+        Report.log(Status.PASS, "Modified json as per the add books reuest body requirement : "+modifiedJson);
+
 
         // Step 6: Convert the modified JSON object to a string
          modifiedJsonString = modifiedJson.toString(4);  // Pretty-printing

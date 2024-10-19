@@ -58,7 +58,6 @@ public class CheckoutFlow extends BaseTest {
 			objShip.fillMapAndShipping();
          }
 		else{
-			System.out.println("Uma is always Uma");
 //			obj = new HomePage(DriverManager.getDriver());
             obj.registration(username, password);
 			//do registration and exit

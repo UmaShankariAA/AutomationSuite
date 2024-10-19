@@ -48,9 +48,13 @@ public class ShippingPage {
 		wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(editLocation)));
 		driver.findElement(editLocation).click();
 		wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(addNewAddress)));
-		driver.findElement(addNewAddress).click();
+		checkAddNewAddress();
+		driver.findElement(locationBox).clear();
 		driver.findElement(locationBox).sendKeys("Hawally,Kuwait");
+		Thread.Sleep(100);
+		wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(locationSuggestion)));
 		driver.findElement(locationSuggestion).click();
+		Thread.Sleep(100);
 		wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(confirmLocation)));
 		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", driver.findElement(confirmLocation));
 		driver.findElement(confirmLocation).click();
@@ -83,5 +87,19 @@ public class ShippingPage {
 		driver.findElement(confirmShippingAddress).click();
 		wait.until(ExpectedConditions.urlToBe("https://www.xcite.com/checkout/delivery"));
 		Report.log(Status.PASS, "Shipping/Billing address is added ");
+	}
+	public void checkAddNewAddress() throws Exception {
+		try {
+
+			// If OOS found, click decrease qty
+			if (driver.findElement(addNewAddress).isDisplayed()) {
+				driver.findElement(addNewAddress).click();
+				System.out.println("addNewAddress found");
+			}
+
+		} catch (NoSuchElementException e) {
+			// First element is not present, do nothing or log a message
+			System.out.println("addNewAddress not found, so editing the previous address .");
+		}
 	}
 }
