@@ -18,6 +18,11 @@ pipeline {
                     url: 'git@github.com:UmaShankariAA/AutomationSuite.git'
             }
         }
+	stage('Build') { 
+    	    steps {
+        	sh 'mvn -B -DskipTests clean package -X' 
+    	    }
+	}
         stage('Test') {
             steps {
                 sh 'mvn --batch-mode -V -U -e test -Dsurefire.useFile=false -X'
