@@ -9,7 +9,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import java.util.List;
 import java.time.Duration;
-
+import java.util.HashMap;
+import java.util.Map;
 
 public class CartPage {
 
@@ -20,6 +21,7 @@ public class CartPage {
     public By Checkout = By.xpath("(//*[@class='button primaryOnLight '])");
 	public By OOS = By.xpath("//span[contains(text(), 'item(s) is insufficient in stock')]");
 	public By decreaseQtyBtn = By.xpath("//button[@aria-label='decrease quantity']");
+	public By productName = By.xpath("//*[@class='flex flex-col gap-4']/div/a/h5");
 
 	public CartPage(WebDriver driver) {
 		this.driver = driver;
@@ -31,11 +33,15 @@ public class CartPage {
 	 * @param password
 	 * @throws Exception
 	 */
-	public void increaseQty() throws Exception {
+	public void increaseQty(Map<String, String> productDetails) throws Exception {
 		Thread.sleep(2000);
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+		wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(productName)));
+		String productNameFromSearch = productDetails.get("productName");
+		String productNameCartPage = driver.findElement(productName).getText();
+		Assert.assertEquals(productNameFromSearch, productNameCartPage, "Product name does not match between search and cart");
 		String qtyString = driver.findElement(qtyText).getText();
 		Integer qtyProduct = Integer.parseInt(qtyString);
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 		wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(increaseQtyBtn)));
 		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true); arguments[0].click();", driver.findElement(increaseQtyBtn));
 		wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(increaseQtyBtn)));

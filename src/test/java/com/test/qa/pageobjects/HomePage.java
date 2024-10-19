@@ -1,6 +1,8 @@
 package com.test.qa.pageobjects;
 import java.util.UUID;
 import org.openqa.selenium.*;
+import java.util.HashMap;
+import java.util.Map;
 import org.openqa.selenium.WebDriver;
 import com.aventstack.extentreports.Status;
 import com.test.qa.reportmanager.Report;
@@ -32,6 +34,9 @@ public class HomePage {
 	public By searchInput = By.xpath("//*[@class='aa-Input']");
 	public By searchIcon = By.xpath("//*[@class='aa-SubmitButton']");
 	public By searchResult = By.xpath("//ul[contains(@class, 'grid grid-')]/li[2]");
+	public By productName=By.xpath("(//*[contains(@class,'ProductTile_productName')])[2]");
+	public By productPrice=By.xpath("(//*[contains(@class,'ProductTile_productName')])[2]/following-sibling::h4");
+
 	public By codeButton=By.id("regverify");
 	public HomePage(WebDriver driver) {
 		this.driver = driver;
@@ -84,7 +89,7 @@ public class HomePage {
 		wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(codeButton)));
 		Report.log(Status.PASS, "Authentication code is sent to the mail.");
 	}
-	public void searchProduct(String search) throws Exception {
+	public Map<String, String> searchProduct(String search) throws Exception {
 		driver.get("https://www.xcite.com/");
 		Thread.sleep(1000);
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
@@ -93,9 +98,16 @@ public class HomePage {
 		wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(searchIcon)));
 		driver.findElement(searchIcon).click();
 		Thread.sleep(2000);
+		wait.until((ExpectedCondition<Boolean>) wd ->
+				((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
+		String productNameSearch = driver.findElement(productName).getText();
+		String productPriceSearch = driver.findElement(productPrice).getText();
+		Map<String, String> productDetails = new HashMap<>();
+		productDetails.put("productName", productNameSearch);
+		productDetails.put("productPrice", productPriceSearch);
 		driver.findElement(searchResult).click();
 		Thread.sleep(1000);
-
+		return productDetails;
 	}
 
 	/**

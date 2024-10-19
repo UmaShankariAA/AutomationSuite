@@ -10,6 +10,9 @@ import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+
+import java.util.HashMap;
 import java.util.List;
 import com.aventstack.extentreports.Status;
 import com.codoid.products.exception.FilloException;
@@ -40,19 +43,22 @@ public class CheckoutFlow extends BaseTest {
 		context.setAttribute("testName", testCaseName);
 		HomePage obj = new HomePage(DriverManager.getDriver());
 		CartPage objCart = new CartPage(DriverManager.getDriver());
-        if(search!=""){
+
+		if(search!=""){
 			obj.login(username, password);
 			Thread.sleep(3000);
 			DriverManager.getDriver().get("https://www.xcite.com/checkout/cart");
 			objCart.emptyCart();
-			obj.searchProduct(search);
+			Map<String, String> productDetails = new HashMap<>();
+			productDetails=obj.searchProduct(search);
 			Assert.assertEquals(obj.getPageCurrentUrl(), "https://www.xcite.com/search?q=iPhone");
 			Report.log(Status.PASS, "Search is successful");
+			Report.log(Status.PASS, "Product details are"+productDetails);
+			Thread.sleep(1000);
 			PDP objPdp = new PDP(DriverManager.getDriver());
+			objPdp.addToCart(productDetails);
 			Thread.sleep(1000);
-			objPdp.addToCart();
-			Thread.sleep(1000);
-			objCart.increaseQty();
+			objCart.increaseQty(productDetails);
 			Thread.sleep(1000);
 			ShippingPage objShip=new ShippingPage(DriverManager.getDriver());
 			objShip.fillMapAndShipping();

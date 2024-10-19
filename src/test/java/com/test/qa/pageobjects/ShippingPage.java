@@ -7,6 +7,9 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import java.util.HashMap;
+import java.util.Map;
+
 
 import java.time.Duration;
 
@@ -51,10 +54,10 @@ public class ShippingPage {
 		checkAddNewAddress();
 		driver.findElement(locationBox).clear();
 		driver.findElement(locationBox).sendKeys("Hawally,Kuwait");
-		Thread.Sleep(100);
+		Thread.sleep(100);
 		wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(locationSuggestion)));
 		driver.findElement(locationSuggestion).click();
-		Thread.Sleep(100);
+		Thread.sleep(100);
 		wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(confirmLocation)));
 		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", driver.findElement(confirmLocation));
 		driver.findElement(confirmLocation).click();
@@ -102,4 +105,5 @@ public class ShippingPage {
 			System.out.println("addNewAddress not found, so editing the previous address .");
 		}
 	}
+
 }

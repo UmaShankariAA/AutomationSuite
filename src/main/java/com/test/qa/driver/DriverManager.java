@@ -51,8 +51,8 @@ public class DriverManager {
 
 		getDriver().manage().window().maximize();
 		getDriver().manage().deleteAllCookies();
-		getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
-		getDriver().manage().timeouts().pageLoadTimeout(Duration.ofSeconds(100));
+		getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(40));
+		getDriver().manage().timeouts().pageLoadTimeout(Duration.ofSeconds(40));
 	}
 
 	/**
