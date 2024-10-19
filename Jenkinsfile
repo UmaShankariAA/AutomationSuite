@@ -2,7 +2,8 @@ pipeline {
     agent any
 
     tools {
-        maven 'mvn'  // Use the name you gave Maven in the Jenkins tool configuration
+        maven 'mvn'
+        jdk 'jdk23'
     }
     
     environment {
