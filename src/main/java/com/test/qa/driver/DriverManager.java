@@ -71,7 +71,7 @@ public class DriverManager {
 
 		switch (browserName) {
 		case "chrome":
-			System.setProperty("webdriver.chrome.driver", "/Users/appu/Downloads/chromedriver-mac-x64/chromedriver");
+			System.setProperty("webdriver.chrome.driver", Configuration.TEST_RESOURCE_PATH+"/chromedriver");
 			ChromeOptions options = new ChromeOptions();
 			options.addArguments("--disable-notifications");
 			driver = new ChromeDriver(options);
