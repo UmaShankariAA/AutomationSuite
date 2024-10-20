@@ -64,8 +64,9 @@ public class CheckoutFlow extends BaseTest {
 	public Object[][] userData() throws FilloException {
 		ExcelManager fillo = new ExcelManager();
 		List<HashMap<String, String>> users = fillo.getAllData(Configuration.TEST_RESOURCE_PATH, "testdata.xls", "TestData");
-		Object[][] dataObj = new Object[users.size()][4];
-
+		int numColumns = users.get(0).size();
+		Object[][] dataObj = new Object[users.size()][numColumns];
+		System.out.println("No of coulmns is"+ numColumns);
 		for (int i = 0; i < users.size(); i++) {
 			dataObj[i][0] = users.get(i).get("TestCaseName");
 			dataObj[i][1] = users.get(i).get("Username");
