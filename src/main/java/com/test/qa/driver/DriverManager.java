@@ -13,6 +13,8 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.safari.SafariDriver;
 import com.test.qa.configurations.Configuration;
 import org.testng.annotations.Optional;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
 
 /**
  * DriverManager class contains methods to initialise browser driver & launch browser before test execution
@@ -22,6 +24,8 @@ import org.testng.annotations.Optional;
 public class DriverManager {
 	
 	protected static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
+	private static WebDriverWait wait;
+
 	static Logger log = LogManager.getLogger(DriverManager.class);
 	
     private DriverManager()	{
@@ -51,8 +55,8 @@ public class DriverManager {
 
 		getDriver().manage().window().maximize();
 		getDriver().manage().deleteAllCookies();
-		getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(40));
-		getDriver().manage().timeouts().pageLoadTimeout(Duration.ofSeconds(40));
+		getDriver().manage().timeouts().implicitlyWait(Duration.ofSeconds(100));
+		getDriver().manage().timeouts().pageLoadTimeout(Duration.ofSeconds(100));
 	}
 
 	/**
@@ -134,5 +138,11 @@ public class DriverManager {
 	 * 
 	 * }
 	 */
+    // Added dynamic wait
+	public static WebDriverWait getWait(int seconds) {
+		return new WebDriverWait(getDriver(), Duration.ofSeconds(seconds));
+	}
+
+
 
 }

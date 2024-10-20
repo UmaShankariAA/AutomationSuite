@@ -11,6 +11,7 @@ import java.util.List;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
+import com.test.qa.driver.*;
 
 public class CartPage {
 
@@ -35,23 +36,23 @@ public class CartPage {
 	 */
 	public void increaseQty(Map<String, String> productDetails) throws Exception {
 		Thread.sleep(2000);
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-		wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(productName)));
+		DriverManager.getWait(60).until(ExpectedConditions.elementToBeClickable(driver.findElement(productName)));
 		String productNameFromSearch = productDetails.get("productName");
 		String productNameCartPage = driver.findElement(productName).getText();
+		Report.log(Status.PASS, "Product Name in cart is"+productNameCartPage);
 		Assert.assertEquals(productNameFromSearch, productNameCartPage, "Product name does not match between search and cart");
 		String qtyString = driver.findElement(qtyText).getText();
 		Integer qtyProduct = Integer.parseInt(qtyString);
-		wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(increaseQtyBtn)));
+		DriverManager.getWait(60).until(ExpectedConditions.elementToBeClickable(driver.findElement(increaseQtyBtn)));
 		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true); arguments[0].click();", driver.findElement(increaseQtyBtn));
-		wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(increaseQtyBtn)));
+		DriverManager.getWait(60).until(ExpectedConditions.elementToBeClickable(driver.findElement(increaseQtyBtn)));
 		qtyString = driver.findElement(qtyText).getText();
 		Integer qtyProductNew = Integer.parseInt(qtyString);
 		Assert.assertEquals((int) qtyProductNew, (int) qtyProduct+1, "The value is not incremented by 1.");
 		// to be done : add a json object or map to be compared with pdp
 		Report.log(Status.PASS, "Qty is increased");
 //		checkOOS();
-		wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(Checkout)));
+		DriverManager.getWait(60).until(ExpectedConditions.elementToBeClickable(driver.findElement(Checkout)));
 		driver.findElement(Checkout).click();
 
 	}

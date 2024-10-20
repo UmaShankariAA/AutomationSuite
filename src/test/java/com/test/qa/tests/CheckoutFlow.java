@@ -26,18 +26,7 @@ import com.test.qa.utilities.ExcelManager;
 @Listeners(TestListener.class)
 
 public class CheckoutFlow extends BaseTest {
-//	ArrayList<String> loginCreds = new ArrayList<String>();
 
-//	@Test(dataProvider = "userData",priority = 0)
-//	public void testLogin(String username, String password, String s) throws Exception {
-//		HomePage obj = new HomePage(DriverManager.getDriver());
-//		obj.login(username, password);
-////		if(search!=""){
-////
-////		}
-//		Assert.assertEquals(obj.getPageCurrentUrl(), "https://www.xcite.com/");
-//		Report.log(Status.PASS, "Login successful");
-//	}
 	@Test(dataProvider = "userData",priority = 1)
 	public void Checkout(String testCaseName,String username, String password, String search,ITestContext context) throws Exception {
 		context.setAttribute("testName", testCaseName);
@@ -45,6 +34,7 @@ public class CheckoutFlow extends BaseTest {
 		CartPage objCart = new CartPage(DriverManager.getDriver());
 
 		if(search!=""){
+			Report.log(Status.PASS, "Checkout flow started for Registered User ");
 			obj.login(username, password);
 			Thread.sleep(3000);
 			DriverManager.getDriver().get("https://www.xcite.com/checkout/cart");
@@ -63,8 +53,8 @@ public class CheckoutFlow extends BaseTest {
 			objShip.fillMapAndShipping();
          }
 		else{
-//			obj = new HomePage(DriverManager.getDriver());
-            obj.registration(username, password);
+			Report.log(Status.PASS, "New User Registration ");
+			obj.registration(username, password);
 			//do registration and exit
 			return;
 		}

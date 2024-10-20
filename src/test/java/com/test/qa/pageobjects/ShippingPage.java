@@ -9,6 +9,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import java.util.HashMap;
 import java.util.Map;
+import com.test.qa.driver.*;
+import com.test.qa.driver.*;
+import org.testng.Assert;
 
 
 import java.time.Duration;
@@ -36,41 +39,36 @@ public class ShippingPage {
 	public By editLocation=By.xpath("//*[@id='location']/..//following-sibling::div[1]");
 	public By addNewAddress=By.xpath("//span[contains(text(), 'Add new address')]//parent::button");
 	public By mapMapUI=By.xpath("(//*[@class='gm-style-mtc'])[1]");
-	public By mapSatelliteUI=By.xpath("((//*[@class='gm-style-mtc'])[2]");
+	public By mapSatelliteUI=By.xpath("(//*[@class='gm-style-mtc'])[2]");
 	String checkBoxXPath="//li[@role='menuitemcheckbox' and @title='Show imagery with street names']";
+	String checkBoxTerrainXPath="//li[@role='menuitemcheckbox' and @title='Show street map with terrain']";
 	String mapContainerXPath = "//div[@class='gm-style']";
 
-	/**
-	 * Login with valid credentials
-	 * 
-	 * @param userName
-	 * @param password
-	 * @throws Exception
-	 */
 	public void fillMapAndShipping() throws Exception {
 
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(60));
 		Thread.sleep(3000);
-		wait.until((ExpectedCondition<Boolean>) wd ->
+		DriverManager.getWait(60).until((ExpectedCondition<Boolean>) wd ->
 				((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
-//		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", driver.findElement(editLocation));
-		wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(editLocation)));
+		DriverManager.getWait(60).until(ExpectedConditions.elementToBeClickable(driver.findElement(editLocation)));
 		driver.findElement(editLocation).click();
-		wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(addNewAddress)));
+		DriverManager.getWait(60).until(ExpectedConditions.elementToBeClickable(driver.findElement(addNewAddress)));
 		checkAddNewAddress();
-//		driver.findElement(mapSatelliteUI).click();
-//		validateCheckBoxBehavior(checkBoxXPath,mapContainerXPath);
+		DriverManager.getWait(60).until(ExpectedConditions.elementToBeClickable(driver.findElement(mapSatelliteUI)));
+		driver.findElement(mapSatelliteUI).click();
+		validateCheckBoxBehavior(checkBoxXPath,mapContainerXPath);
+		DriverManager.getWait(60).until(ExpectedConditions.elementToBeClickable(driver.findElement(mapSatelliteUI)));
+		driver.findElement(mapMapUI).click();
+		validateCheckBoxBehavior(checkBoxTerrainXPath,mapContainerXPath);
 		driver.findElement(locationBox).clear();
 		driver.findElement(locationBox).sendKeys("Hawally,Kuwait");
 		Thread.sleep(100);
-		wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(locationSuggestion)));
+		DriverManager.getWait(60).until(ExpectedConditions.elementToBeClickable(driver.findElement(locationSuggestion)));
 		driver.findElement(locationSuggestion).click();
 		Thread.sleep(100);
-		wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(confirmLocation)));
+		DriverManager.getWait(60).until(ExpectedConditions.elementToBeClickable(driver.findElement(confirmLocation)));
 		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", driver.findElement(confirmLocation));
 		driver.findElement(confirmLocation).click();
-//		Thread.sleep(2000);
-		wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(blockInput)));
+		DriverManager.getWait(60).until(ExpectedConditions.elementToBeClickable(driver.findElement(blockInput)));
 		driver.findElement(blockInput).sendKeys("1");
 		Thread.sleep(20);
 		driver.findElement(paciInput).clear();
@@ -82,7 +80,6 @@ public class ShippingPage {
 		driver.findElement(lastNameInput).clear();
 		driver.findElement(lastNameInput).sendKeys("A");
 		Thread.sleep(20);
-//		driver.findElement(emailInput).sendKeys("umaashankarii@gmail.com");
 		Thread.sleep(20);
 		driver.findElement(primaryPhoneNumber).clear();
 		driver.findElement(primaryPhoneNumber).sendKeys("96598073413");
@@ -96,7 +93,7 @@ public class ShippingPage {
 		// Select the value "Email" (or other values like "SMS", "WhatsApp")
 		select.selectByVisibleText("Email");
 		driver.findElement(confirmShippingAddress).click();
-		wait.until(ExpectedConditions.urlToBe("https://www.xcite.com/checkout/delivery"));
+		DriverManager.getWait(60).until(ExpectedConditions.urlToBe("https://www.xcite.com/checkout/delivery"));
 		Report.log(Status.PASS, "Shipping/Billing address is added ");
 	}
 	public void checkAddNewAddress() throws Exception {
@@ -142,8 +139,13 @@ public class ShippingPage {
 
 		if (visibility.equals("visible") && !display.equals("none")) {
 			System.out.println("Map label appears " + action + " the checkbox.");
+			Assert.assertTrue(visibility.equals("visible") && !display.equals("none"),
+					"Expected map label to appear, but it didn't.");
 		} else {
+
 			System.out.println("Map label disappears " + action + " the checkbox.");
+			Assert.assertFalse(visibility.equals("visible") && !display.equals("none"),
+					"Expected map label to disappear, but it is still visible.");
 		}
 	}
 }

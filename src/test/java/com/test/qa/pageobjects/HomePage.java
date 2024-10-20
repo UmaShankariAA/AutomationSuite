@@ -10,6 +10,7 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.testng.Assert;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import com.test.qa.driver.*;
 
 import java.time.Duration;
 
@@ -51,11 +52,10 @@ public class HomePage {
 	 */
 	public void login(String userName, String password) throws Exception {
 		driver.get(BASE_URL);
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(40));
-		wait.until((ExpectedCondition<Boolean>) wd ->
+		DriverManager.getWait(60).until((ExpectedCondition<Boolean>) wd ->
 				((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
 		Report.log(Status.PASS, "Navigated to the home page");
-		wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(loginIcon)));
+		DriverManager.getWait(60).until(ExpectedConditions.elementToBeClickable(driver.findElement(loginIcon)));
 		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", driver.findElement(loginIcon));
 		driver.findElement(loginIcon).click();
 //		driver.findElement(loginIcon).click();
@@ -63,10 +63,10 @@ public class HomePage {
 		driver.findElement(logInBtn).click();
 		driver.findElement(passwordField).sendKeys(password);
 		driver.findElement(logInBtn).click();
-		wait.until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
-		wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(loginIcon)));
+		DriverManager.getWait(60).until((ExpectedCondition<Boolean>) wd -> ((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
+		DriverManager.getWait(60).until(ExpectedConditions.elementToBeClickable(driver.findElement(loginIcon)));
 		((JavascriptExecutor) driver).executeScript("arguments[0].click();", driver.findElement(loginIcon));
-		wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(loggedInText)));
+		DriverManager.getWait(60).until(ExpectedConditions.elementToBeClickable(driver.findElement(loggedInText)));
 		String actualText = driver.findElement(loggedInText).getText();
 		Assert.assertTrue(actualText.contains("You are logged in!"), "The text does not contain 'You are logged in!'");		Report.log(Status.PASS, "Logged In text is displayed in home screen");
 	}
@@ -83,23 +83,25 @@ public class HomePage {
 		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true)", driver.findElement(checkboxNew));
 		driver.findElement(checkboxNew).click();
 		Thread.sleep(2000);
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-		wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(signUpButton)));
+		DriverManager.getWait(60).until(ExpectedConditions.elementToBeClickable(driver.findElement(signUpButton)));
 		driver.findElement(signUpButton).click();
-		wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(codeButton)));
+		DriverManager.getWait(60).until(ExpectedConditions.elementToBeClickable(driver.findElement(codeButton)));
 		Report.log(Status.PASS, "Authentication code is sent to the mail.");
 	}
 	public Map<String, String> searchProduct(String search) throws Exception {
 		driver.get("https://www.xcite.com/");
 		Thread.sleep(1000);
-		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(60));
-		wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(searchInput)));
-		driver.findElement(searchInput).sendKeys(search);
-		wait.until(ExpectedConditions.elementToBeClickable(driver.findElement(searchIcon)));
-		driver.findElement(searchIcon).click();
-		Thread.sleep(2000);
-		wait.until((ExpectedCondition<Boolean>) wd ->
+
+		DriverManager.getWait(60).until((ExpectedCondition<Boolean>) wd ->
 				((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete"));
+		DriverManager.getWait(60).until(ExpectedConditions.elementToBeClickable(driver.findElement(searchInput)));
+		driver.findElement(searchInput).sendKeys(search);
+		DriverManager.getWait(60).until(ExpectedConditions.elementToBeClickable(driver.findElement(searchIcon)));
+		driver.findElement(searchIcon).click();
+		DriverManager.getWait(60).until((ExpectedCondition<Boolean>) wd ->
+				((JavascriptExecutor) wd).executeScript("return document.readyState").equals("complete") &&
+						wd.getCurrentUrl().equals("https://www.xcite.com/search?q=iPhone")
+		);
 		Assert.assertEquals(getPageCurrentUrl(), "https://www.xcite.com/search?q=iPhone");
 		String productNameSearch = driver.findElement(productName).getText();
 		String productPriceSearch = driver.findElement(productPrice).getText();

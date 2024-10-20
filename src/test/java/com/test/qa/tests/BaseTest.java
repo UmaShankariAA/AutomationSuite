@@ -27,7 +27,7 @@ public class BaseTest {
 	 */
 	@AfterMethod
 	public void quit() {
-//		DriverManager.quit();
+		DriverManager.quit();
 	
 	}
 	
@@ -36,7 +36,7 @@ public class BaseTest {
 	 */
 	@AfterClass
 	public void tearDown() {
-		DriverManager.quit();
+//		DriverManager.quit();
 		DriverManager.terminate();
 	}
 
