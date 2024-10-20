@@ -44,10 +44,10 @@ pipeline {
             ])
             
             // Optionally archive reports or other artifacts
-            archiveArtifacts artifacts: 'target/*.jar', allowEmptyArchive: true
+            // archiveArtifacts artifacts: 'target/*.jar', allowEmptyArchive: true
 
             // Clean up workspace
-            cleanWs()
+            // cleanWs()
         }
     }
 }
