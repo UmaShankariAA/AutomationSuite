@@ -7,12 +7,7 @@ pipeline {
     }
 
     environment {
-        GIT_SSH_COMMAND = 'ssh -o StrictHostKeyChecking=no' // Skip host 
-key checking
-        // Uncomment below to disable Jenkins Content Security Policy if 
-needed for external resources in reports
-        // hudson.model.DirectoryBrowserSupport.CSP = "default-src 'self'; 
-style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline';"
+        GIT_SSH_COMMAND = 'ssh -o StrictHostKeyChecking=no' // Skip host key checking
     }
 
     stages {
@@ -20,8 +15,7 @@ style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline';"
             steps {
                 git branch: 'main',
                     credentialsId: 'uma_git',
-                    url: 
-'git@github.com:UmaShankariAA/AutomationSuite.git'
+                    url: 'git@github.com:UmaShankariAA/AutomationSuite.git'
             }
         }
 
@@ -33,35 +27,28 @@ style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline';"
 
         stage('Test') {
             steps {
-                sh 'mvn --batch-mode -V -U -e test 
--Dsurefire.useFile=false -X'
-            }
-        }
-
-        stage('Publish Report') {
-            steps {
-                // Publish the HTML report generated during the test stage
-                publishHTML(target: [
-                    reportName: 'Test Report',
-                    reportDir: 'path/to/report',  // Replace with actual 
-path to your report directory
-                    reportFiles: 'index.html',    // Replace with the main 
-HTML report file
-                    alwaysLinkToLastBuild: true,
-                    keepAll: true
-                ])
+                sh 'mvn --batch-mode -V -U -e test -Dsurefire.useFile=false -X'
             }
         }
     }
 
     post {
         always {
+            // Publish the HTML report regardless of test results
+            publishHTML(target: [
+                reportName: 'Test Report',
+                reportDir: 'reports',  // Replace with actual path to your report directory
+                reportFiles: 'index.html',    // Replace with the main HTML report file
+                alwaysLinkToLastBuild: true,
+                keepAll: true
+            ])
+            
             // Optionally archive reports or other artifacts
-            archiveArtifacts artifacts: 'target/*.jar', allowEmptyArchive: 
-true
+            archiveArtifacts artifacts: 'target/*.jar', allowEmptyArchive: true
 
             // Clean up workspace
             cleanWs()
         }
     }
 }
+
